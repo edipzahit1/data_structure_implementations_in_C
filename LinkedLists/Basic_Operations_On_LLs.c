@@ -8,6 +8,13 @@ typedef struct linkedList
     int sign;
 }linkedList;
 
+typedef struct doublyLL
+{
+    int v;
+    struct doublyLL *next;
+    struct doublyLL *prev;
+}doublyLL;
+
 linkedList* intersectionHashing(linkedList *firstList, linkedList *secondList);
 linkedList* intersection(linkedList *firstHead, linkedList *secondHead);
 int removeDublicates(linkedList *head);
@@ -225,7 +232,7 @@ linkedList* intersectionHashing(linkedList *firstList, linkedList *secondList) /
     return newList;
 }
 
-void printList(linkedList *head)
+void printList(doublyLL *head)
 {
     if (head == NULL)
     {
@@ -348,13 +355,6 @@ void splitCLL(linkedList *head, linkedList **firstHalf, linkedList **secondHalf)
     reverseList(secondHalf);
 }
 
-typedef struct doublyLL
-{
-    int v;
-    struct doublyLL *next;
-    struct doublyLL *prev;
-}doublyLL;
-
 int pushDLL(doublyLL **head, int val)
 {
     doublyLL *new_node = (doublyLL *)malloc(sizeof(doublyLL));
@@ -383,15 +383,59 @@ void mergeSortDLL(doublyLL *head, doublyLL *low, doublyLL *high)
 {
     
 }
+//to be contuniued.
+
+int insert_(int key, int set[])
+{
+    if (set[key] != 0)  set[key]++;
+    else                set[key] = 1;
+}
+
+doublyLL* removeDublicatesDLL(doublyLL *head)
+{
+    if (head == NULL)
+    {
+        printf("The list is empty.");
+        return NULL;
+    }
+    doublyLL *walker = head;
+    int set[100] = {0};
+    while (walker != NULL)
+    {
+        insert_(walker->v, set);
+        walker = walker->next;
+    }
+    doublyLL *result = NULL;
+    walker = head;
+    while (walker != NULL)
+    {
+        if (set[walker->v] >= 1)
+        {
+            pushDLL(&result, walker->v);
+            set[walker->v] = 0;
+        }
+        walker = walker->next;
+    }
+    return result;
+}
 
 int main()
 {
-    doublyLL *head;
+    doublyLL *head = NULL;
 
     pushDLL(&head, 40);
+    pushDLL(&head, 10);
     pushDLL(&head, 20);
+    pushDLL(&head, 10);
     pushDLL(&head, 50);
     pushDLL(&head, 10);
+    pushDLL(&head, 40);
+    pushDLL(&head, 10);
     pushDLL(&head, 30);
+    pushDLL(&head, 40);
+    pushDLL(&head, 40);
+    pushDLL(&head, 40);
 
+    head = removeDublicatesDLL(head);
+    printList(head);
 }
